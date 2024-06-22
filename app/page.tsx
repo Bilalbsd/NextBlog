@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { PrismaClient, Post } from "@prisma/client";
 import Link from "next/link";
 
@@ -12,6 +13,21 @@ async function getPosts() {
     },
   });
   return posts;
+=======
+import { DropdownComponent } from "./components/DropdownComponent";
+import { CardList } from "./components/CardList";
+
+export default function Home() {
+  return (
+    <div className="home container mx-auto">
+      <div className="flex justify-around">
+        <h1 className="text-2xl">Tous les articles</h1>
+        <DropdownComponent />
+      </div>
+      <CardList />
+    </div>
+  );
+>>>>>>> cb3d69cf79f447acfd70931fd685e0e7e71f2602
 }
 
 const HomePage = async () => {
