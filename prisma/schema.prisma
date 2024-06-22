@@ -8,24 +8,32 @@ generator client {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String?
-  password String
-  posts    Post[]
-  comments Comment[]
-  likes    Like[]
+  id      Int       @id @default(autoincrement())
+  name    String
+  email   String    @unique
+  role    String    @default("USER")
+  posts   Post[]
+  Comment Comment[]
+  Like    Like[]
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime  @default(now())
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  Int
-  comments  Comment[]
-  likes     Like[]
+  id       Int       @id @default(autoincrement())
+  title    String
+  subtitle String
+  content  String
+  authorId Int
+  author   User      @relation(fields: [authorId], references: [id])
+  images   Image[]
+  Comment  Comment[]
+  Like     Like[]
+}
+
+model Image {
+  id     Int    @id @default(autoincrement())
+  url    String
+  postId Int
+  post   Post   @relation(fields: [postId], references: [id])
 }
 
 model Comment {
