@@ -2,17 +2,17 @@
 
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css"; // Import des styles par défaut de React Quill
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { createArticle } from "../actions/actions";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function NewArticlePage() {
-    const [isClient, setIsClient] = useState(false);
+    const [content, setContent] = useState("");
 
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    const handleContentChange = (value: SetStateAction<string>) => {
+        setContent(value);
+    };
 
     return (
         <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
@@ -55,33 +55,40 @@ export default function NewArticlePage() {
                     >
                         Contenu
                     </label>
-                    {isClient && (
-                        <ReactQuill
-                            id="content"
-                            className="mt-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            modules={{
-                                toolbar: [
-                                    [
-                                        { header: "1" },
-                                        { header: "2" },
-                                        { font: [] },
-                                    ],
-                                    [{ size: [] }],
-                                    [
-                                        "bold",
-                                        "italic",
-                                        "underline",
-                                        "strike",
-                                        "blockquote",
-                                    ],
-                                    [{ list: "ordered" }, { list: "bullet" }],
-                                    ["link", "image", "video"],
-                                    ["clean"],
+                    <input
+                        type="text"
+                        name="content"
+                        value={content}
+                        style={{ display: "none" }}
+                        readOnly
+                    />
+                    <ReactQuill
+                        id="content"
+                        className="mt-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        modules={{
+                            toolbar: [
+                                [
+                                    { header: "1" },
+                                    { header: "2" },
+                                    { font: [] },
                                 ],
-                            }}
-                            placeholder="Écrivez votre contenu ici..."
-                        />
-                    )}
+                                [{ size: [] }],
+                                [
+                                    "bold",
+                                    "italic",
+                                    "underline",
+                                    "strike",
+                                    "blockquote",
+                                ],
+                                [{ list: "ordered" }, { list: "bullet" }],
+                                ["link", "image", "video"],
+                                ["clean"],
+                            ],
+                        }}
+                        placeholder="Écrivez votre contenu ici..."
+                        value={content}
+                        onChange={handleContentChange}
+                    />
                 </div>
                 <div className="flex justify-end">
                     <button

@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { PrismaClient } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 const prisma = new PrismaClient();
 
@@ -13,12 +14,13 @@ export async function createArticle(formData: FormData) {
     await prisma.post.create({
         data: {
             title: formData.get("title") as string,
-            categorie: formData.get("category") as string,
+            category: formData.get("category") as string,
+            content: formData.get("content") as string,
             slug: (formData.get("title") as string)
                 .replace(/\s+/g, "-")
                 .toLowerCase(),
-            content: formData.get("content") as string,
             authorId: session.user.id as string,
         },
     });
+    redirect('/');
 }

@@ -6,7 +6,7 @@ type ArticleProps = {
     content: string;
     slug: string;
     createdAt: string;
-    categorie: string;
+    category: string;
     authorId: string;
 };
 
@@ -14,7 +14,21 @@ export async function CardItem({ article }: { article: ArticleProps }) {
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString("fr-FR");
-    }
+    };
+
+    const stripHtmlTags = (text: string) => {
+        return text.replace(/<[^>]*>?/gm, "");
+    };
+
+    const truncateText = (text: string, wordLimit: number) => {
+        const words = text.split(" ");
+        if (words.length <= wordLimit) {
+            return text;
+        }
+        return words.slice(0, wordLimit).join(" ") + "...";
+    };
+
+    const cleanContent = truncateText(stripHtmlTags(article.content), 20);
 
     const postCreator = await prisma.user.findUnique({
         where: {
@@ -38,14 +52,14 @@ export async function CardItem({ article }: { article: ArticleProps }) {
                                     Publié le {formatDate(article.createdAt)}
                                 </p>
                                 <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
-                                    {article.categorie}
+                                    {article.category}
                                 </span>
                             </div>
                             <h5 className="text-2xl font-bold tracking-tight text-gray-900 hover:cursor-pointer mb-2 overflow-hidden text-ellipsis whitespace-nowrap">
                                 {article.title}
                             </h5>
                             <p className="font-normal text-gray-700 mb-2 overflow-hidden text-ellipsis">
-                                {article.content}
+                                {cleanContent}
                             </p>
                         </div>
                         <div className="flex items-center gap-4 mt-2">

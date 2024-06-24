@@ -81,9 +81,9 @@ model Post {
   title     String    @unique
   content   String
   slug      String    @unique
-  category  String
+  category  String    @default("Autre")
   createdAt DateTime  @default(now())
-  author    User      @relation(fields: [authorId], references: [id])
+  author    User?      @relation(fields: [authorId], references: [id])
   authorId  String
   comments  Comment[]
   likes     Like[]
