@@ -1,6 +1,6 @@
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -8,23 +8,83 @@ generator client {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String?
-  password String
-  posts    Post[]
-  comments Comment[]
-  likes    Like[]
+  id             String          @id @default(cuid())
+  name           String?
+  email          String?         @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  authenticators Authenticator[]
+  posts          Post[]
+  comments       Comment[]
+  likes          Like[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String   @id @default(cuid())
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  createdAt            DateTime @default(now())
+  user                 User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, credentialID])
 }
 
 model Post {
   id        Int       @id @default(autoincrement())
-  title     String
+  title     String    @unique
   content   String
-  slug      String    @unique @default("slug")
+  slug      String    @unique
+  category  String
   createdAt DateTime  @default(now())
   author    User      @relation(fields: [authorId], references: [id])
-  authorId  Int
+  authorId  String
   comments  Comment[]
   likes     Like[]
 }
@@ -32,17 +92,19 @@ model Post {
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
   createdAt DateTime @default(now())
+  postId    Int
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Like {
-  id     Int  @id @default(autoincrement())
-  post   Post @relation(fields: [postId], references: [id])
+  id     Int    @id @default(autoincrement())
   postId Int
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  userId String
+  post   Post   @relation(fields: [postId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
 }

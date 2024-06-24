@@ -1,15 +1,9 @@
-// import NewArticlePage from "./articles/new/page";
-// import { ArticleList } from "./components/ArticleList";
-// import { CardItem } from "./components/CardItem";
-import { CardList } from "./components/CardList";
+import { CardList } from "@/components/CardList";
 
-export default function Home() {
+export default function HomePage() {
     return (
-        <div className="home container mx-auto">
+        <div>
             <CardList />
-            {/* <CardItem /> */}
-            {/* <ArticleList /> */}
-            {/* <NewArticlePage /> */}
         </div>
     );
 }
