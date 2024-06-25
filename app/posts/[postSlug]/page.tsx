@@ -32,11 +32,18 @@ export default async function ArticleDetails({
     });
 
     return (
-        <div>
-            <h1>{article.title}</h1>
-            <h2>{article.category}</h2>
-            <div dangerouslySetInnerHTML={{ __html: cleanContent }}></div>
-            <h3>{params.postSlug}</h3>
+        <div className="container mx-auto px-8 py-8 sm:px-6 sm:px-8">
+            <h1 className="text-3xl text-center my-5 font-bold">
+                {article.title}
+            </h1>
+            <div className="text-sm text-gray-500 mb-4">{article.category}</div>
+            <div
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: cleanContent }}
+            ></div>
+            <div className="mt-4 text-sm text-gray-400">
+                URL: {params.postSlug}
+            </div>
         </div>
     );
 }
