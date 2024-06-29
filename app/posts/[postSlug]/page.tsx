@@ -9,7 +9,7 @@ export default async function ArticleDetails({
 }) {
     const prisma = new PrismaClient();
 
-    console.log(params, "params");
+    // console.log(params, "params");
 
     const article = await prisma.post.findUniqueOrThrow({
         where: { slug: params.postSlug },
@@ -21,7 +21,7 @@ export default async function ArticleDetails({
         },
     });
 
-    console.log(article, "article");
+    // console.log(article, "article");
 
     const cleanContent = sanitizeHtml(article.content, {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),

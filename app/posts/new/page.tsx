@@ -40,13 +40,20 @@ export default function NewArticlePage() {
                     >
                         Catégorie
                     </label>
-                    <input
+                    {/* <input
                         type="text"
                         id="category"
                         name="category"
                         className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                         required
-                    />
+                    /> */}
+                    <select name="category" id="category">
+                        <option value="NextJS">NextJS</option>
+                        <option value="React">React</option>
+                        <option value="Vue">Vue</option>
+                        <option value="Java">Java</option>
+                        <option value="Autre">Autre</option>
+                    </select>
                 </div>
                 <div>
                     <label
